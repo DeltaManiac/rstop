@@ -1,0 +1,5 @@
+[workspace]
+members = [
+	"restop_cli",
+	"restop_lib",
+]
