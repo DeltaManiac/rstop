@@ -1,31 +1,26 @@
-use clap::crate_authors;
-use clap::crate_license;
-use clap::crate_name;
-use clap::crate_version;
-use clap::App;
-use clap::AppSettings;
-use clap::Arg;
+use std::path::PathBuf;
+
 use clap::ValueHint;
+use clap::{crate_authors, crate_name, crate_version};
+use clap::{App, AppSettings};
+use clap::{Arg, ArgSettings};
 
 pub fn init() -> App<'static> {
     App::new(crate_name!())
         .version(crate_version!())
-        .author(crate::crate_authors!())
-        .license(crate::crate_license!())
+        .author(crate_authors!())
         .subcommand(
             App::new("run")
                 .about("Start a postman collection run")
                 .arg(
                     Arg::new("collection")
                         .about("Path to postman collection")
-                        .value_name("File")
                         .forbid_empty_values(true)
                         .takes_value(true)
-                        .value_hint(ValueHint::FilePath),
+                        .value_hint(ValueHint::FilePath)
+                        .setting(ArgSettings::Last),
                 )
-                .setting(AppSettings::SubcommandRequiredElseHelp)
-                .setting(AppSettings::ColoredHelp)
-                .setting(AppSettings::Built),
+                .setting(AppSettings::ColoredHelp),
         )
         .subcommand(
             App::new("info")
@@ -33,16 +28,22 @@ pub fn init() -> App<'static> {
                 .arg(
                     Arg::new("collection")
                         .about("Path to postman collection")
-                        .value_name("File")
-                        .forbid_empty_values(true)
-                        .takes_value(true)
+                        .required(true)
+                        .validator(check_file)
                         .value_hint(ValueHint::FilePath),
                 )
-                .setting(AppSettings::SubcommandRequiredElseHelp)
-                .setting(AppSettings::ColoredHelp)
-                .setting(AppSettings::Built),
+                .setting(AppSettings::ColoredHelp),
         )
         .setting(AppSettings::SubcommandRequiredElseHelp)
         .setting(AppSettings::ColoredHelp)
-        .setting(AppSettings::Built)
+}
+
+fn check_file(path: &str) -> Result<(), String> {
+    let path = PathBuf::from(path);
+    if !path.exists() {
+        return Err(String::from(
+            format_args!("Could not read file at {}", path.to_str().unwrap()).to_string(),
+        ));
+    }
+    Ok(())
 }
