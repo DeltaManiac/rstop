@@ -4,6 +4,9 @@ use clap::ValueHint;
 use clap::{crate_authors, crate_name, crate_version};
 use clap::{App, AppSettings};
 use clap::{Arg, ArgSettings};
+use colored::*;
+use restop_lib::postman::PostmanInfo;
+use restop_lib::postman::SpecVersion;
 
 pub fn init() -> App<'static> {
     App::new(crate_name!())
@@ -46,4 +49,36 @@ fn check_file(path: &str) -> Result<(), String> {
         ));
     }
     Ok(())
+}
+
+macro_rules! printKV {
+    ($k:expr,$v:expr) => {{
+        println!("{} : {}", $k.red().bold(), $v.blue());
+    }};
+}
+
+pub fn print_info(info: PostmanInfo) {
+    println!("{}", "Information".yellow().bold());
+    let ver = match info.spec {
+        SpecVersion::V2_0_0 => "v2.0.0".to_owned(),
+        SpecVersion::V2_1_0 => "v2.1.0".to_owned(),
+    };
+    printKV!("Specification Version", ver);
+    printKV!(
+        "Postman Id",
+        info.information.postman_id.unwrap_or(String::from("None"))
+    );
+    printKV!(
+        "Description",
+        info.information.description.unwrap_or(String::from("None"))
+    );
+    printKV!("Name", info.information.name);
+    printKV!("Schema", info.information.schema);
+    printKV!(
+        "Version",
+        info.information.version.unwrap_or(String::from("None"))
+    );
+    printKV!("Items", info.items.to_string());
+    printKV!("Events", info.events.to_string());
+    printKV!("Variables", info.events.to_string());
 }
