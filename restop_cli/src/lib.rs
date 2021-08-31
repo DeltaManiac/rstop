@@ -6,6 +6,7 @@ use clap::{App, AppSettings};
 use clap::{Arg, ArgSettings};
 use colored::*;
 use restop_lib::postman::PostmanInfo;
+use restop_lib::postman::RestopLibError;
 use restop_lib::postman::SpecVersion;
 
 pub fn init() -> App<'static> {
@@ -63,7 +64,7 @@ pub fn print_info(info: PostmanInfo) {
         SpecVersion::V2_0_0 => "v2.0.0".to_owned(),
         SpecVersion::V2_1_0 => "v2.1.0".to_owned(),
     };
-    printKV!("Specification Version", ver);
+    printKV!("Name", info.information.name);
     printKV!(
         "Postman Id",
         info.information.postman_id.unwrap_or(String::from("None"))
@@ -72,7 +73,7 @@ pub fn print_info(info: PostmanInfo) {
         "Description",
         info.information.description.unwrap_or(String::from("None"))
     );
-    printKV!("Name", info.information.name);
+    printKV!("Specification Version", ver);
     printKV!("Schema", info.information.schema);
     printKV!(
         "Version",
@@ -81,4 +82,20 @@ pub fn print_info(info: PostmanInfo) {
     printKV!("Items", info.items.to_string());
     printKV!("Events", info.events.to_string());
     printKV!("Variables", info.events.to_string());
+}
+
+pub fn print_error(error: RestopLibError, path: Option<String>) {
+    match error {
+        RestopLibError::PostmanCollectionError(err) => {
+            eprintln!(
+                "{}: {} at {} ",
+                "error".red(),
+                err,
+                path.unwrap_or("".to_string())
+            )
+        }
+        _ => {
+            eprintln!("{}: {} ", "error".red(), error)
+        }
+    }
 }

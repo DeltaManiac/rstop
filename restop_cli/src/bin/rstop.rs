@@ -1,7 +1,8 @@
 use human_panic::setup_panic;
-use log::{debug, error, info, log_enabled, Level};
+use restop_cli::print_error;
 use restop_cli::print_info;
 use restop_lib;
+
 use std::error::Error;
 use std::path::Path;
 
@@ -17,10 +18,15 @@ fn main() -> Result<(), Box<dyn Error>> {
     let opts = restop_cli::init().get_matches();
     match opts.subcommand() {
         Some(("info", info_matches)) => {
-            let c = restop_lib::postman::spec(
+            match restop_lib::postman::spec(
                 Path::new(info_matches.value_of("collection").unwrap()).to_path_buf(),
-            )?;
-            print_info(c);
+            ) {
+                Ok(info) => print_info(info),
+                Err(e) => print_error(
+                    e,
+                    Some(info_matches.value_of("collection").unwrap().to_string()),
+                ),
+            };
         }
         _ => unreachable!(),
     }

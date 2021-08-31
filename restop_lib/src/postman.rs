@@ -76,7 +76,7 @@ trait Stringify {
 impl Stringify for postman_collection::v2_0_0::DescriptionUnion {
     fn as_string(&self) -> String {
         match self {
-            postman_collection::v2_0_0::DescriptionUnion::Description(c) => "".to_string(),
+            postman_collection::v2_0_0::DescriptionUnion::Description(_c) => "".to_string(),
             postman_collection::v2_0_0::DescriptionUnion::String(c) => c.to_owned(),
         }
     }
@@ -85,7 +85,7 @@ impl Stringify for postman_collection::v2_0_0::DescriptionUnion {
 impl Stringify for postman_collection::v2_1_0::DescriptionUnion {
     fn as_string(&self) -> String {
         match self {
-            postman_collection::v2_1_0::DescriptionUnion::Description(c) => "".to_string(),
+            postman_collection::v2_1_0::DescriptionUnion::Description(_c) => "".to_string(),
             postman_collection::v2_1_0::DescriptionUnion::String(c) => c.to_owned(),
         }
     }
@@ -94,7 +94,7 @@ impl Stringify for postman_collection::v2_1_0::DescriptionUnion {
 impl Stringify for postman_collection::v2_0_0::CollectionVersion {
     fn as_string(&self) -> String {
         match self {
-            postman_collection::v2_0_0::CollectionVersion::CollectionVersionClass(c) => {
+            postman_collection::v2_0_0::CollectionVersion::CollectionVersionClass(_c) => {
                 "".to_string()
             }
             postman_collection::v2_0_0::CollectionVersion::String(c) => c.to_owned(),
@@ -105,7 +105,7 @@ impl Stringify for postman_collection::v2_0_0::CollectionVersion {
 impl Stringify for postman_collection::v2_1_0::CollectionVersion {
     fn as_string(&self) -> String {
         match self {
-            postman_collection::v2_1_0::CollectionVersion::CollectionVersionClass(c) => {
+            postman_collection::v2_1_0::CollectionVersion::CollectionVersionClass(_c) => {
                 "".to_string()
             }
             postman_collection::v2_1_0::CollectionVersion::String(c) => c.to_owned(),
